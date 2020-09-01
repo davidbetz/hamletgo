@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package hamlet;
+
+option go_package ="github.com/davidbetz/hamletgrpc";
+
+message Void {}
+message ID {
+ string id=1;
+}
+
+message Metadata {
+ int32 pages = 1;
+ repeated string genre=2;
+ string summary = 3;
+}
+
+message Book {
+ string id = 1;
+ string title = 2;
+ repeated string authors = 3;
+ Metadata metadata = 4;
+ string published = 5;
+ string editor = 6;
+}
+
+message BookList {
+ repeated Book books = 1;
+}
+
+service BookActions {
+ rpc Save(Book) returns(ID) {}
+ rpc List(Void) returns(BookList) {}
+}
