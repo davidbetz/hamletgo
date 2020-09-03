@@ -1,3 +1,4 @@
+// Package hamlet generates sample strings, arrays of strings, objects, and arrays of strings using words from Shakespeare Hamlet. It helps Latin students avoid lorem ipsum confusion.
 package hamlet
 
 import (
@@ -19,7 +20,7 @@ func init() {
 	dataLength = len(data)
 }
 
-// Metadata represents more book data
+// Metadata represents extended book data
 type Metadata struct {
 	Pages   int      `json:"pages"`
 	Genre   []string `json:"genre"`
@@ -63,8 +64,8 @@ func GetWordArray(itemCount int, wordCount int) []string {
 	return list
 }
 
-// GetObject creates a book object
-func GetObject() Book {
+// GetObject creates a book object; use GetObject(true) to ensure Editor is populated
+func GetObject(args ...bool) Book {
 	rand.Seed(time.Now().UTC().UnixNano())
 	metadata := Metadata{
 		Pages:   randint(1, 400),
@@ -79,19 +80,19 @@ func GetObject() Book {
 		Published: fmt.Sprintf("%d-%s-%s", randint(1960, 2016), pad(randint(1, 12)), pad(randint(1, 28))),
 	}
 
-	if randint(1, 4) == 1 {
+	if (len(args) > 0 && args[0]) || randint(1, 4) == 1 {
 		item.Editor = GetWords(1)
 	}
 
 	return item
 }
 
-// GetObjectArray creates an array of book objects
-func GetObjectArray(count int) []Book {
+// GetObjectArray creates an array of book objects; use GetObject(true) to ensure Editor is populated
+func GetObjectArray(count int, args ...bool) []Book {
 	bulk := make([]Book, 0)
 	var n int
 	for n = 0; n < count; n++ {
-		bulk = append(bulk, GetObject())
+		bulk = append(bulk, GetObject(args...))
 	}
 	return bulk
 }
